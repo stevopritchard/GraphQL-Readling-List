@@ -1,31 +1,11 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import BookList from './components/BookList';
 
 const client = new ApolloClient({
-  uri: 'https://localhost:4000/graphql',
+  uri: 'http://localhost:4000/graphql',
   cache: new InMemoryCache(),
 });
-
-client
-  .query({
-    query: gql`
-      query GetBooks {
-        books {
-          id
-          name
-          genre
-          authorId
-        }
-      }
-    `,
-  })
-  .then((result) => console.log(result));
 
 function App() {
   return (
