@@ -26,6 +26,5 @@ app.all('/graphql', createHandler({ schema }));
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
-  console.log(process.env);
   console.log(`Now listening for requests on port ${port}!`);
 });
