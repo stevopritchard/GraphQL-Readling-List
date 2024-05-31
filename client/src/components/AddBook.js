@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_AUTHORS, ADD_BOOK } from '../queries/queries';
+import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import { GET_BOOKS, GET_AUTHORS, ADD_BOOK } from '../queries/queries';
 
 function AddBook() {
   const [name, setName] = useState('');
   const [genre, setGenre] = useState('');
   const [author, setAuthor] = useState('');
 
+  const client = useApolloClient();
   const { loading, data } = useQuery(GET_AUTHORS);
   const [addBook] = useMutation(ADD_BOOK);
 
@@ -22,10 +23,18 @@ function AddBook() {
     });
   };
 
-  const submitForm = (event) => {
+  const submitForm = async (event) => {
     event.preventDefault();
     console.log(name, genre, author);
     addBook({ variables: { name: name, genre: genre, authorId: author } });
+    try {
+      await client.refetchQueries({
+        include: [GET_BOOKS],
+      });
+      console.log('Queries refetched successfully');
+    } catch (error) {
+      console.error('Error refetching queries:', error);
+    }
   };
 
   return (
